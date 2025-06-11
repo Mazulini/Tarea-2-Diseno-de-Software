@@ -1,25 +1,47 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-#Create your models here.
-
 class Usuario(models.Model):
+    id = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
-    correo = models.EmailField(max_length=150) #models.EmailField(max_length=150,unique=True)
+    correo = models.CharField(unique=True, max_length=150)
     contrasena = models.CharField(max_length=200)
-    telefono = models.CharField(max_length=20)
-    fecha_registro = models.DateTimeField(auto_now_add=True)
+    telefono = models.CharField(max_length=20, blank=True, null=True)
+    fecha_registro = models.DateTimeField()
+    rol = models.TextField()  # This field type is a guess.
 
     class Meta:
-        abstract = True  # Esto indica que no crea tabla propia
+        managed = False
+        db_table = 'usuario'
 
-    def __str__(self):
-        return self.nombre
 
-class Administrador(Usuario):
-    pass
+class Admin(models.Model):
+    usuario = models.OneToOneField('Usuario', models.DO_NOTHING, primary_key=True)
 
-class Conductor(Usuario):
+    class Meta:
+        managed = False
+        db_table = 'admin'
+
+
+class Cliente(models.Model):
+    usuario = models.OneToOneField('Usuario', models.DO_NOTHING, primary_key=True)
+    direccion = models.CharField(max_length=300)
+
+    class Meta:
+        managed = False
+        db_table = 'cliente'
+
+
+class Conductor(models.Model):
+    usuario = models.OneToOneField('Usuario', models.DO_NOTHING, primary_key=True)
     tipo_licencia = models.CharField(max_length=100)
 
-class Cliente(Usuario):
-    direccion = models.CharField(max_length=300)
+    class Meta:
+        managed = False
+        db_table = 'conductor'

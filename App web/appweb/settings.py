@@ -92,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gestion_rutas',
         'USER': 'postgres',
-        'PASSWORD': 'abcd1234',
+        'PASSWORD': 'camaleon09',
         'HOST': 'localhost',
         'PORT': '5432',
     }

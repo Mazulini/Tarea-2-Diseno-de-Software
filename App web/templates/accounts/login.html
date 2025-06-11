@@ -1,13 +1,19 @@
-<!-- apps/accounts/templates/accounts/login.html -->
-{% extends "base.html" %}
+<h2>Iniciar Sesión</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.correo.label_tag }}<br>
+  {{ form.correo }}<br><br>
 
-{% block title %}Iniciar sesión{% endblock %}
+  {{ form.contrasena.label_tag }}<br>
+  {{ form.contrasena }}<br><br>
 
-{% block content %}
-  <h2>Iniciar sesión</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Entrar</button>
-  </form>
-{% endblock %}
+  <button type="submit">Ingresar</button>
+</form>
+
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

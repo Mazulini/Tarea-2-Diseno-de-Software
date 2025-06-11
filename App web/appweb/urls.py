@@ -16,12 +16,13 @@ Including another URLconf
 """
 # appweb/urls.py
 
+# appweb/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),
-    path('', include('apps.logistica.urls', namespace='logistica'))
+    path('', include('apps.logistica.urls', namespace='logistica')),
 ]
-
