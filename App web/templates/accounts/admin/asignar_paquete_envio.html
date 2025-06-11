@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Asignar Paquete a Envío</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h2>Asignar Paquete a Envío</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- paquete -->
+        <p>
+            <label for="{{ form.paquete.id_for_label }}">{{ form.paquete.label }}</label>
+            <select name="{{ form.paquete.html_name }}" id="{{ form.paquete.id_for_label }}">
+                {% for paquete in form.paquete.field.queryset %}
+                    <option
+                        value="{{ paquete.pk }}"
+                        {% if paquete.pk|stringformat:"s" == form.paquete.value|stringformat:"s" %}selected{% endif %}>
+                        {{ paquete.id }}    <!-- aquí muestra __str__() o el campo que definas -->
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.paquete.errors }}
+        </p>
+
+        <!-- envío -->
+        <p>
+            <label for="{{ form.envio.id_for_label }}">{{ form.envio.label }}</label>
+            <select name="{{ form.envio.html_name }}" id="{{ form.envio.id_for_label }}">
+                {% for envio in form.envio.field.queryset %}
+                    <option
+                        value="{{ envio.pk }}"
+                        {% if envio.pk|stringformat:"s" == form.envio.value|stringformat:"s" %}selected{% endif %}>
+                        {{ envio.id }}    <!-- muestra __str__() de Envio -->
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.envio.errors }}
+        </p>
+
+        <button type="submit">Asignar</button>
+    </form>
+
+    <a href="{% url 'admin_ver_paquetes' %}">Volver a Paquetes</a>
+</body>
+</html>

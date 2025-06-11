@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.accounts',
-    'apps.logistica',
     #'apps.api',
     #'apps.web',
 
@@ -92,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'gestion_rutas',
         'USER': 'postgres',
-        'PASSWORD': 'camaleon09',
+        'PASSWORD': 'lobo09',
         'HOST': 'localhost',
         'PORT': '5432',
     }

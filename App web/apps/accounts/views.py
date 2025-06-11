@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
-from .models import Usuario, Cliente
-from .forms import LoginForm, RegisterForm
+from .models import Usuario, Cliente, Paquete, EnvioPaquete, Envio, EstadoDeEntrega
+from .forms import LoginForm, RegisterForm, AsignarPaqueteEnvioForm, AsignarEnvioConductorForm
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password
+
+#Views de accounts
 
 def register_view(request):
     if request.method == 'POST':
@@ -101,6 +103,8 @@ def es_admin(user):
 from django.shortcuts import render
 from .decorators import require_rol
 
+#Views de logistica
+
 #Admin
 
 @require_rol('admin')
@@ -109,7 +113,13 @@ def ver_usuarios(request):
 
 @require_rol('admin')
 def admin_ver_paquetes(request):
-    return render(request, 'accounts/admin/ver_paquetes.html')
+    paquetes = Paquete.objects.select_related('remitente__usuario', 'estado_entrega').all()
+    envios_paquetes = EnvioPaquete.objects.prefetch_related('envio__ruta', 'envio__conductor__usuario').all()
+    context = {
+        'paquetes': paquetes,
+        'envios_paquetes': envios_paquetes,
+    }
+    return render(request, 'accounts/admin/ver_paquetes.html', context)
 
 @require_rol('admin')
 def ver_historial_envios(request):
@@ -127,11 +137,46 @@ def gestionar_horarios(request):
 def admin_ver_rutas(request):
     return render(request, 'accounts/admin/ver_rutas.html')
 
+@require_rol('admin')
+def asignar_paquete_envio(request):
+    if request.method == 'POST':
+        form = AsignarPaqueteEnvioForm(request.POST)
+        if form.is_valid():
+            paquete = form.cleaned_data['paquete']
+            paquete_id = paquete.id
+            envio = form.cleaned_data['envio']
+            envio_id = envio.id
+            messages.success(request, 'Paquete asignado al envio.')
+            return redirect('admin_ver_paquetes')
+    else:
+        form = AsignarPaqueteEnvioForm()
+    return render(request, 'accounts/admin/asignar_paquete_envio.html', {'form': form})
+
+@require_rol('admin')
+def asignar_envio_conductor(request):
+    if request.method == 'POST':
+        form = AsignarEnvioConductorForm(request.POST)
+        if form.is_valid():
+            envio = form.cleaned_data['envio']
+            conductor = form.cleaned_data['conductor']
+            envio.conductor = conductor
+            envio.save()
+            en_transito = EstadoDeEntrega.objects.get(nombre_estado='En tránsito')
+            envios_paquetes = EnvioPaquete.objects.filter(envio=envio)
+            for ep in envios_paquetes:
+                ep.paquete.estado_entrega = en_transito
+                ep.paquete.save()
+            messages.success(request, 'Envio asignado al conductor y paquetes en tránsito.')
+            return redirect('admin_ver_paquetes')
+    else:
+        form = AsignarEnvioConductorForm()
+    return render(request, 'accounts/admin/asignar_envio_conductor.html', {'form': form})
+
 #Conductor 
 
 @require_rol('conductor')
-def conductor_ver_rutas(request):
-    return render(request, 'accounts/conductor/ver_rutas.html')
+def conductor_ver_envios(request):
+    return render(request, 'accounts/conductor/ver_envios.html')
 
 #Cliente 
 

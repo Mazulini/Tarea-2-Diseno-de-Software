@@ -20,10 +20,12 @@ urlpatterns = [
     path('admin/registrar-socio/', require_rol('admin')(views.registrar_socio), name='registrar_socio'),
     path('admin/gestionar-horarios/', require_rol('admin')(views.gestionar_horarios), name='gestionar_horarios'),
     path('admin/ver-rutas/', require_rol('admin')(views.admin_ver_rutas), name='admin_ver_rutas'),
+    path('admin/asignar-paquete-envio/', views.asignar_paquete_envio, name='asignar_paquete_envio'),
+    path('admin/asignar-envio-conductor/', views.asignar_envio_conductor, name='asignar_envio_conductor'),
 
     #Conductor
     path('conductor/', require_rol('conductor')(views.conductor_dashboard), name='conductor_dashboard'),
-    path('conductor/conductor_ver-rutas/', require_rol('conductor')(views.conductor_ver_rutas), name='conductor_ver_rutas'),
+    path('conductor/conductor_ver-envios/', require_rol('conductor')(views.conductor_ver_envios), name='conductor_ver_envios'),
 
     #Cliente
     path('cliente/enviar-paquete/', require_rol('cliente')(views.cliente_enviar_paquete), name='cliente_enviar_paquete'),

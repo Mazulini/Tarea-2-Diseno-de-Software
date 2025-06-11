@@ -1,2 +1,62 @@
-<h1>Lista de paquetes</h1>
-<p>Aquí se mostrará la lista de todos los paquetes.</p>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Paquetes</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h2>Paquetes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Remitente</th>
+                <th>Destinatario</th>
+                <th>Estado</th>
+                <th>Tipo</th>
+                <th>Peso (kg)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for modelo in paquetes %}
+                <tr>
+                    <td>{{ modelo.id }}</td>
+                    <td>{{ modelo.remitente.usuario.nombre }}</td>
+                    <td>{{ modelo.destinatario }}</td>
+                    <td>{{ modelo.estado_entrega.nombre_estado }}</td>
+                    <td>{{ modelo.tipo }}</td>
+                    <td>{{ modelo.peso }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'asignar_paquete_envio' %}">Asignar Paquete a Envio</a>
+    <a href="{% url 'asignar_envio_conductor' %}">Asignar Envio a Conductor</a>
+</body>
+</html>
