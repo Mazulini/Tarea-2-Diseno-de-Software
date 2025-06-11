@@ -43,7 +43,7 @@ def logout_view(request):
 def no_autorizado(request):
     # Aquí también asumo que el template está en una carpeta general templates/no_autorizado.html,
     # si está en accounts, cambiar a 'accounts/no_autorizado.html'
-    return render(request, 'no_autorizado.html', status=403)
+    return render(request, 'accounts/no_autorizado.html', status=403)
 
 # Dashboards
 def admin_dashboard(request):
@@ -71,7 +71,7 @@ def ver_usuarios(request):
     return render(request, 'accounts/admin/ver_usuarios.html')
 
 @require_rol('admin')
-def ver_paquetes(request):
+def admin_ver_paquetes(request):
     return render(request, 'accounts/admin/ver_paquetes.html')
 
 @require_rol('admin')
@@ -87,7 +87,7 @@ def gestionar_horarios(request):
     return render(request, 'accounts/admin/gestionar_horarios.html')
 
 @require_rol('admin')
-def ver_rutas(request):
+def admin_ver_rutas(request):
     return render(request, 'accounts/admin/ver_rutas.html')
 
 #Conductor 
@@ -99,9 +99,9 @@ def conductor_ver_rutas(request):
 #Cliente 
 
 @require_rol('cliente')
-def ver_paquetes(request):
+def cliente_ver_paquetes(request):
     return render(request, 'accounts/cliente/ver_paquetes.html')
 
-@require_rol('conductor')
-def enviar_paquete(request):
+@require_rol('cliente')
+def cliente_enviar_paquete(request):
     return render(request, 'accounts/cliente/enviar_paquete.html')

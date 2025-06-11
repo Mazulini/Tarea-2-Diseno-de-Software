@@ -13,18 +13,18 @@ urlpatterns = [
 
     #Admin
     path('admin/ver-usuarios/', require_rol('admin')(views.ver_usuarios), name='ver_usuarios'),
-    path('admin/ver-paquetes/', require_rol('admin')(views.ver_paquetes), name='ver_paquetes'),
+    path('admin/ver-paquetes/', require_rol('admin')(views.admin_ver_paquetes), name='admin_ver_paquetes'),
     path('admin/historial-envios/', require_rol('admin')(views.ver_historial_envios), name='ver_historial_envios'),
     path('admin/registrar-socio/', require_rol('admin')(views.registrar_socio), name='registrar_socio'),
     path('admin/gestionar-horarios/', require_rol('admin')(views.gestionar_horarios), name='gestionar_horarios'),
-    path('admin/ver-rutas/', require_rol('admin')(views.ver_rutas), name='ver_rutas'),
+    path('admin/ver-rutas/', require_rol('admin')(views.admin_ver_rutas), name='admin_ver_rutas'),
 
     #Conductor
     path('conductor/', require_rol('conductor')(views.conductor_dashboard), name='conductor_dashboard'),
-    path('conductor/ver-rutas/', require_rol('conductor')(views.conductor_ver_rutas), name='ver_rutas'),
+    path('conductor/conductor_ver-rutas/', require_rol('conductor')(views.conductor_ver_rutas), name='conductor_ver_rutas'),
 
     #Cliente
-    path('cliente/enviar-paquete/', require_rol('cliente')(views.enviar_paquete), name='enviar_paquete'),
-    path('cliente/ver-paquetes/', require_rol('cliente')(views.ver_paquetes), name='ver_paquetes'),
+    path('cliente/enviar-paquete/', require_rol('cliente')(views.cliente_enviar_paquete), name='cliente_enviar_paquete'),
+    path('cliente/ver-paquetes/', require_rol('cliente')(views.cliente_ver_paquetes), name='cliente_ver_paquetes'),
 
 ]
