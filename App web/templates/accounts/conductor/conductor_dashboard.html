@@ -1,2 +1,31 @@
-<h2>Bienvenido, Conductor</h2>
-<a href="{% url 'logout' %}">Cerrar sesión</a>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Conductor</title>
+    <style>
+        .botonera a {
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .botonera a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Bienvenido, Conductor</h2>
+    <div class="botonera">
+        <a href="{% url 'logout' %}">Cerrar sesión</a>
+        <a href="{% url 'ver_rutas' %}">Ver rutas</a>
+    </div>
+</body>
+</html>

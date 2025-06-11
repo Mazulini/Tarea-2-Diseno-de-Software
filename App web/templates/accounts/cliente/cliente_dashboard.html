@@ -1,2 +1,32 @@
-<h2>Bienvenido, Cliente</h2>
-<a href="{% url 'logout' %}">Cerrar sesión</a>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Cliente</title>
+    <style>
+        .botonera a {
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .botonera a:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h2>Bienvenido, Cliente</h2>
+    <div class="botonera">
+        <a href="{% url 'logout' %}">Cerrar sesión</a>
+        <a href="{% url 'enviar_paquete' %}">Enviar paquete</a>
+        <a href="{% url 'ver_paquetes' %}">Ver paquetes</a>
+    </div>
+</body>
+</html>

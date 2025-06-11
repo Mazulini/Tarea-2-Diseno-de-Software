@@ -64,6 +64,8 @@ def es_admin(user):
 from django.shortcuts import render
 from .decorators import require_rol
 
+#Admin
+
 @require_rol('admin')
 def ver_usuarios(request):
     return render(request, 'accounts/admin/ver_usuarios.html')
@@ -87,3 +89,19 @@ def gestionar_horarios(request):
 @require_rol('admin')
 def ver_rutas(request):
     return render(request, 'accounts/admin/ver_rutas.html')
+
+#Conductor 
+
+@require_rol('conductor')
+def conductor_ver_rutas(request):
+    return render(request, 'accounts/conductor/ver_rutas.html')
+
+#Cliente 
+
+@require_rol('cliente')
+def ver_paquetes(request):
+    return render(request, 'accounts/cliente/ver_paquetes.html')
+
+@require_rol('conductor')
+def enviar_paquete(request):
+    return render(request, 'accounts/cliente/enviar_paquete.html')
