@@ -1,9 +1,11 @@
 from django.urls import path
 from . import views
+from .views import register_view
 from .decorators import require_rol
 
 urlpatterns = [
     path('login/', views.login_view, name='login'),
+    path('register/', register_view, name='register'),
     path('logout/', views.logout_view, name='logout'),
     path('no-autorizado/', views.no_autorizado, name='no_autorizado'),
 

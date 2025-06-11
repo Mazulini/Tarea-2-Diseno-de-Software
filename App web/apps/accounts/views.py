@@ -1,8 +1,45 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
-from .models import Usuario
-from .forms import LoginForm
+from .models import Usuario, Cliente
+from .forms import LoginForm, RegisterForm
+from django.utils import timezone
+from django.contrib.auth.hashers import make_password
+
+def register_view(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            correo = form.cleaned_data['correo']
+            contrasena = form.cleaned_data['contrasena']
+            nombre = form.cleaned_data['nombre']
+            direccion = form.cleaned_data['direccion']
+            telefono = form.cleaned_data['telefono']
+
+            if Usuario.objects.filter(correo=correo).exists():
+                messages.error(request, 'Ya existe una cuenta con este correo')
+            else:
+                usuario = Usuario.objects.create(
+                    correo=correo,
+                    contrasena=make_password(contrasena),
+                    nombre=nombre,
+                    telefono=telefono,
+                    fecha_registro=timezone.now(),
+                    rol='cliente'
+                )
+
+                Cliente.objects.create(
+                    usuario=usuario,
+                    direccion=direccion
+                )
+
+                messages.success(request, 'Registro exitoso. Ahora puedes iniciar sesión.')
+                return redirect('login')
+    else:
+        form = RegisterForm()
+
+    return render(request, 'accounts/register.html', {'form': form})
+
 
 def login_view(request):
     if request.method == 'POST':
