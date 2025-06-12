@@ -2,21 +2,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Asignar Ruta a Conductor</title>
+    <title>Asignar Envío a Conductor</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h2>Asignar Ruta a Conductor</h2>
+    <h2>Asignar Envío a Conductor</h2>
+
     {% if messages %}
         {% for message in messages %}
             <p style="color: green;">{{ message }}</p>
         {% endfor %}
     {% endif %}
+
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+
+        <!-- envío -->
+        <p>
+            <label for="{{ form.envio.id_for_label }}">{{ form.envio.label }}</label>
+            <select name="{{ form.envio.html_name }}" id="{{ form.envio.id_for_label }}">
+                {% for envio in form.envio.field.queryset %}
+                    <option
+                        value="{{ envio.pk }}"
+                        {% if envio.pk|stringformat:"s" == form.envio.value|stringformat:"s" %}selected{% endif %}>
+                        {{ envio.id }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.envio.errors }}
+        </p>
+
+        <!-- conductor -->
+        <p>
+            <label for="{{ form.conductor.id_for_label }}">{{ form.conductor.label }}</label>
+            <select name="{{ form.conductor.html_name }}" id="{{ form.conductor.id_for_label }}">
+                {% for conductor in form.conductor.field.queryset %}
+                    <option
+                        value="{{ conductor.pk }}"
+                        {% if conductor.pk|stringformat:"s" == form.conductor.value|stringformat:"s" %}selected{% endif %}>
+                        {{ conductor.id }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.conductor.errors }}
+        </p>
+
         <button type="submit">Asignar</button>
     </form>
+
     <a href="{% url 'admin_ver_paquetes' %}">Volver a Paquetes</a>
 </body>
 </html>

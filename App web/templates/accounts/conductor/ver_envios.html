@@ -1,3 +1,29 @@
-<h2>Rutas asignadas al conductor</h2>
-<p>Aquí se mostrarán las rutas asignadas.</p>
-<a href="{% url 'conductor_dashboard' %}">Volver al Dashboard</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Seleccionar Envío</title>
+</head>
+<body>
+  <h2>Seleccionar Envío</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Cargar envío</button>
+  </form>
+
+  {% if envio_seleccionado %}
+    <h3>Detalles del envío #{{ envio_seleccionado.id }}</h3>
+    <ul>
+      <li>Ruta: {{ envio_seleccionado.ruta.id }}</li>
+      <li>Fecha inicio: {{ envio_seleccionado.fecha_hora_inicio }}</li>
+      <li>Conductor: {{ envio_seleccionado.conductor.usuario.nombre }}</li>
+    </ul>
+
+
+    <a href="{% url 'conductor_ver_paquetes_envio' envio_seleccionado.id %}">Ver Paquetes</a>
+  {% endif %}
+</body>
+</html>

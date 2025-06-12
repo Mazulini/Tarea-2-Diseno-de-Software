@@ -35,3 +35,21 @@ class AsignarEnvioConductorForm(forms.Form):
         queryset=Conductor.objects.filter(envio__isnull=True),
         label='Conductor'
     )
+
+class IdModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return str(obj.id)
+
+class ConductorVerEnvioForm(forms.Form):
+    envio = IdModelChoiceField(
+        queryset=Envio.objects.none(),
+        label='Envío'
+    )
+
+    def __init__(self, *args, conductor=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if conductor:
+            self.fields['envio'].queryset = Envio.objects.filter(
+                conductor=conductor,
+                fecha_hora_fin__isnull=True
+            )

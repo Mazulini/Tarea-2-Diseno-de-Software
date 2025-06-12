@@ -25,10 +25,11 @@ urlpatterns = [
 
     #Conductor
     path('conductor/', require_rol('conductor')(views.conductor_dashboard), name='conductor_dashboard'),
-    path('conductor/conductor_ver-envios/', require_rol('conductor')(views.conductor_ver_envios), name='conductor_ver_envios'),
+    path('conductor/ver-envios/', require_rol('conductor')(views.conductor_ver_envios), name='conductor_ver_envios'),
+
+    path('conductor/envio/<int:envio_id>/paquetes/', require_rol('conductor')(views.conductor_ver_paquetes_envio),name='conductor_ver_paquetes_envio'),
 
     #Cliente
     path('cliente/enviar-paquete/', require_rol('cliente')(views.cliente_enviar_paquete), name='cliente_enviar_paquete'),
     path('cliente/ver-paquetes/', require_rol('cliente')(views.cliente_ver_paquetes), name='cliente_ver_paquetes'),
-
 ]

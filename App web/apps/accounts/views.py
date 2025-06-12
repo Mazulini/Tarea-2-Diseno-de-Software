@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
-from .models import Usuario, Cliente, Paquete, EnvioPaquete, Envio, EstadoDeEntrega
-from .forms import LoginForm, RegisterForm, AsignarPaqueteEnvioForm, AsignarEnvioConductorForm
+from .models import Usuario, Cliente, Conductor, Paquete, EnvioPaquete, Envio, EstadoDeEntrega
+from .forms import LoginForm, RegisterForm, AsignarPaqueteEnvioForm, AsignarEnvioConductorForm, ConductorVerEnvioForm
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password
 
@@ -147,7 +147,6 @@ def asignar_paquete_envio(request):
             envio = form.cleaned_data['envio']
             envio_id = envio.id
             messages.success(request, 'Paquete asignado al envio.')
-            return redirect('admin_ver_paquetes')
     else:
         form = AsignarPaqueteEnvioForm()
     return render(request, 'accounts/admin/asignar_paquete_envio.html', {'form': form})
@@ -158,7 +157,9 @@ def asignar_envio_conductor(request):
         form = AsignarEnvioConductorForm(request.POST)
         if form.is_valid():
             envio = form.cleaned_data['envio']
+            envio_id = envio.id
             conductor = form.cleaned_data['conductor']
+            conductor_id = conductor.id
             envio.conductor = conductor
             envio.save()
             en_transito = EstadoDeEntrega.objects.get(nombre_estado='En tránsito')
@@ -176,7 +177,32 @@ def asignar_envio_conductor(request):
 
 @require_rol('conductor')
 def conductor_ver_envios(request):
-    return render(request, 'accounts/conductor/ver_envios.html')
+    usuario_id = request.session.get('usuario_id')
+    conductor = Conductor.objects.get(usuario_id=usuario_id)
+    envio_seleccionado = None
+
+    if request.method == 'POST':
+        form = ConductorVerEnvioForm(request.POST, conductor=conductor)
+        if form.is_valid():
+            envio_seleccionado = form.cleaned_data['envio']
+    else:
+        form = ConductorVerEnvioForm(conductor=conductor)
+
+    return render(request,
+                  'accounts/conductor/ver_envios.html',
+                    {'form': form, 'envio_seleccionado': envio_seleccionado})
+
+@require_rol('conductor')
+def conductor_ver_paquetes_envio(request, envio_id):
+    usuario_id = request.session.get('usuario_id')
+    conductor = get_object_or_404(Conductor, usuario_id=usuario_id)
+    envio = get_object_or_404(Envio, id=envio_id, conductor=conductor)
+
+    paquetes = Paquete.objects.filter(enviopaquete__envio=envio)
+
+    return render(request,
+                  'accounts/conductor/ver_paquetes_envio.html',
+                  {'envio': envio, 'paquetes': paquetes})
 
 #Cliente 
 

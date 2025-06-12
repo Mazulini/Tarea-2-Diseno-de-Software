@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Paquetes del Envío #{{ envio.id }}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    a.back { display: inline-block; margin-bottom: 10px; color: #007bff; }
+  </style>
+</head>
+<body>
+  <h2>Paquetes del Envío #{{ envio.id }}</h2>
+  <a href="{% url 'conductor_ver_envios' %}" class="back">← Volver a Envíos</a>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Remitente</th>
+        <th>Destinatario</th>
+        <th>Estado</th>
+        <th>Tipo</th>
+        <th>Peso (kg)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for paquete in paquetes %}
+        <tr>
+          <td>{{ paquete.id }}</td>
+          <td>{{ paquete.remitente.usuario.nombre }}</td>
+          <td>{{ paquete.destinatario }}</td>
+          <td>{{ paquete.estado_entrega.nombre_estado }}</td>
+          <td>{{ paquete.tipo }}</td>
+          <td>{{ paquete.peso }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No hay paquetes asignados a este envío.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
