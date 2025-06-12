@@ -11,7 +11,7 @@ setuptools==80.9.0
 sqlparse==0.5.3
 tzdata==2025.2
 virtualenv==20.31.2
-equests ==2.31.0
+requests ==2.31.0
 folium ==0.19.7
 polyline ==2.0.2
 haversine ==2.8.0
