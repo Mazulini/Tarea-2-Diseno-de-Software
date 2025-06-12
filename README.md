@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 ### 4. Configurar la base de datos
 1. **Crea la base de datos en PostgreSQL**:
-   - Ejecuta el script SQL proporcionado en el repositorio (por ejemplo, `database.sql`):
+   - Ejecuta el script SQL:
      ```bash
      psql -U postgres -d gestion_rutas -f "Base de Datos/Estructura.sql"
      ```
@@ -34,7 +34,7 @@ pip install -r requirements.txt
 2. **Poblar la base de datos**:
    - Para añadir datos de ejemplo, ejecuta:
      ```bash
-     psql -U postgres -d gestion_rutas -f "Base de Datos/datos.sql"
+     psql -U postgres -d gestion_rutas -f "Base de Datos/Datos.sql"
      ```
 
 3. **Actualizar secuencias de IDs**:
