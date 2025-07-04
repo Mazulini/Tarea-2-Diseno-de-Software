@@ -59,7 +59,7 @@ CREATE INDEX idx_ruta_destino ON ruta(destino);
 
 CREATE TABLE envio (
   id                         SERIAL         PRIMARY KEY,
-  ruta_id                    INTEGER        NOT NULL
+  ruta_id                    INTEGER
                                    REFERENCES ruta(id) ON DELETE RESTRICT,
   conductor_id               BIGINT         NOT NULL
                                    REFERENCES conductor(usuario_id) ON DELETE RESTRICT,
@@ -80,7 +80,7 @@ CREATE TABLE paquete (
   dimensiones                VARCHAR(50),
   destinatario               VARCHAR(200)   NOT NULL,
   estado_entrega             INTEGER        NOT NULL
-                                   REFERENCES estado_de_entrega(id) ON DELETE RESTRICT,
+                                   REFERENCES estado_de_entrega(id) ON DELETE RESTRICT
 );
 
 CREATE INDEX idx_paquete_cliente     ON paquete(remitente);
