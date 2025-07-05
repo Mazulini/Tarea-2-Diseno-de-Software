@@ -212,4 +212,34 @@ def cliente_ver_paquetes(request):
 
 @require_rol('cliente')
 def cliente_enviar_paquete(request):
-    return render(request, 'accounts/cliente/enviar_paquete.html')
+    usuario_id = request.session.get('usuario_id')
+    cliente = get_object_or_404(Cliente, usuario_id=usuario_id)
+
+    destinatarios = Cliente.objects.exclude(usuario_id=usuario_id)
+
+    if request.method == 'POST':
+        tipo = request.POST['tipo']
+        contenido = request.POST['contenido']
+        peso = request.POST['peso']
+        dimensiones = request.POST['dimensiones']
+        destinatario_id = request.POST['destinatario']
+
+        estado_inicial = EstadoDeEntrega.objects.get(nombre_estado__istartswith='En prep')
+        destinatario = get_object_or_404(Cliente, usuario_id=destinatario_id)
+
+        Paquete.objects.create(
+            remitente=cliente,
+            tipo=tipo,
+            contenido=contenido,
+            peso=peso,
+            dimensiones=dimensiones,
+            destinatario=destinatario,
+            estado_entrega=estado_inicial
+        )
+
+        messages.success(request, 'Paquete enviado correctamente.')
+        return redirect('cliente_ver_paquetes')
+
+    return render(request, 'accounts/cliente/enviar_paquete.html', {
+        'destinatarios': destinatarios
+    })

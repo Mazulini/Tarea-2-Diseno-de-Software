@@ -19,10 +19,44 @@
         .botonera a:hover {
             background-color: #218838;
         }
+
+        .mensaje {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
     </style>
 </head>
 <body>
     <h2>Bienvenido, Cliente</h2>
+
+    {% if messages %}
+      <div>
+        {% for message in messages %}
+          <div class="mensaje {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <div class="botonera">
         <a href="{% url 'logout' %}">Cerrar sesión</a>
         <a href="{% url 'cliente_enviar_paquete' %}">Enviar paquete</a>

@@ -109,12 +109,12 @@ class Notificacion(models.Model):
         db_table = 'notificacion'
 
 class Paquete(models.Model):
-    remitente = models.ForeignKey(Cliente, models.DO_NOTHING, db_column='remitente')
+    remitente = models.ForeignKey(Cliente, models.DO_NOTHING, db_column='remitente', related_name='paquetes_enviados')
     tipo = models.CharField(max_length=100)
     contenido = models.TextField(blank=True, null=True)
     peso = models.DecimalField(max_digits=10, decimal_places=2)
     dimensiones = models.CharField(max_length=50, blank=True, null=True)
-    destinatario = models.CharField(max_length=200)
+    destinatario = models.ForeignKey(Cliente, models.DO_NOTHING, db_column='destinatario', related_name='paquetes_recibidos')
     estado_entrega = models.ForeignKey(EstadoDeEntrega, models.DO_NOTHING, db_column='estado_entrega')
     class Meta:
         managed = False
