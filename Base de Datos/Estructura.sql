@@ -78,7 +78,8 @@ CREATE TABLE paquete (
   contenido                  TEXT,
   peso                       NUMERIC(10,2)  NOT NULL,
   dimensiones                VARCHAR(50),
-  destinatario               VARCHAR(200)   NOT NULL,
+  destinatario               BIGINT         NOT NULL
+                                   REFERENCES cliente(usuario_id) ON DELETE CASCADE,
   estado_entrega             INTEGER        NOT NULL
                                    REFERENCES estado_de_entrega(id) ON DELETE RESTRICT
 );

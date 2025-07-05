@@ -44,12 +44,12 @@ INSERT INTO ruta (id, origen, destino, distancia_recorrida, fecha_hora_prevista)
   (5, 'Temuco',      'Valdivia',   150.7, '2025-06-19 10:00:00');
 
 INSERT INTO paquete (id, remitente, tipo, contenido, peso, dimensiones, destinatario, estado_entrega) VALUES
-  (1, 1, 'documento', 'Factura pendiente', 2.5, '30x20x10', 'Empresa Alpha', 1),
-  (2, 2, 'mercancía', 'Repuestos mecánicos', 5.0, '50x40x20', 'Empresa Beta', 1),
-  (3, 6,  'mercancía', 'Componentes electrónicos', 3.2, '40x30x20', 'Tech Solutions Ltda.', 1),
-  (4, 7,  'documento', 'Contrato firmado', 1.0, '25x20x1',  'Inmobiliaria Chile S.A.', 1),
-  (5, 10, 'mercancía', 'Ropa deportiva', 4.5, '45x35x15', 'Sport Center SpA', 2),
-  (6, 13, 'otro', 'Regalo cumpleaños', 2.0, '30x30x30', 'Particular', 1);
+  (1, 1, 'documento', 'Factura pendiente', 2.5, '30x20x10', 2, 1),
+  (2, 2, 'mercancía', 'Repuestos mecánicos', 5.0, '50x40x20', 1, 1),
+  (3, 6,  'mercancía', 'Componentes electrónicos', 3.2, '40x30x20', 7, 1),
+  (4, 7,  'documento', 'Contrato firmado', 1.0, '25x20x1', 6, 1),
+  (5, 10, 'mercancía', 'Ropa deportiva', 4.5, '45x35x15', 13, 2),
+  (6, 13, 'otro', 'Regalo cumpleaños', 2.0, '30x30x30', 10, 1);
 
 INSERT INTO envio (id, ruta_id, conductor_id, fecha_hora_inicio, fecha_hora_fin) VALUES
   (1, 1, 3, '2025-06-15 07:50:00', NULL),
