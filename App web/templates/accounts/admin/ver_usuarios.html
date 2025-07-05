@@ -1,2 +1,64 @@
-<h1>Lista de Usuarios</h1>
-<p>Aquí se mostrará la lista de clientes y conductores.</p>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        select { margin-bottom: 15px; padding: 5px;}
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>Usuarios</h2>
+    <form method="get">
+        <label for="filtro">Mostrar:</label>
+        <select name="filtro" id="filtro" onchange="this.form.submit()">
+            <option value="todo" {% if filtro == 'todo' %}selected{% endif %}>Todo</option>
+            <option value="clientes" {% if filtro == 'clientes' %}selected{% endif %}>Clientes</option>
+            <option value="conductores" {% if filtro == 'conductores' %}selected{% endif %}>Conductores</option>
+        </select>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                {% if filtro == 'clientes' %}
+                    <th>Dirección</th>
+                {% elif filtro == 'conductores' %}
+                    <th>Tipo de Licencia</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td>{{ u.tipo }}</td>
+                <td>{{ u.id }}</td>
+                <td>{{ u.nombre }}</td>
+                <td>{{ u.correo }}</td>
+                <td>{{ u.telefono }}</td>
+                {% if filtro == 'clientes' %}
+                    <td>{{ u.direccion }}</td>
+                {% elif filtro == 'conductores' %}
+                    <td>{{ u.licencia }}</td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="{% if filtro == 'clientes' or filtro == 'conductores' %}6{% else %}5{% endif %}">No hay datos.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'admin_dashboard' %}">Volver al Dashboard</a>
+</body>
+</html>
