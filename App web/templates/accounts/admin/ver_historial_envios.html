@@ -1,2 +1,60 @@
-<h1>Lista de envios</h1>
-<p>Aquí se mostrará el historal de todos los envios realizados.</p>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Historial de Envíos</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        select { margin-bottom: 15px; padding: 5px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h2>Historial de Envíos</h2>
+
+    <form method="get">
+        <label for="filtro">Mostrar:</label>
+        <select name="filtro" id="filtro" onchange="this.form.submit()">
+            <option value="todos" {% if filtro == 'todos' %}selected{% endif %}>Todos</option>
+            <option value="entregados" {% if filtro == 'entregados' %}selected{% endif %}>Entregados</option>
+            <option value="fallidos" {% if filtro == 'fallidos' %}selected{% endif %}>Fallidos</option>
+        </select>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Remitente</th>
+                <th>Destinatario</th>
+                <th>Estado</th>
+                <th>Tipo</th>
+                <th>Peso (kg)</th>
+                <th>Contenidos</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for paquete in paquetes %}
+            <tr>
+                <td>{{ paquete.id }}</td>
+                <td>{{ paquete.remitente.usuario.nombre }}</td>
+                <td>{{ paquete.destinatario.usuario.nombre }}</td>
+                <td>{{ paquete.estado_entrega.nombre_estado }}</td>
+                <td>{{ paquete.tipo }}</td>
+                <td>{{ paquete.peso }}</td>
+                <td>{{ paquete.contenido }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7">No hay envíos en historial.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'admin_dashboard' %}">Volver al Dashboard</a>
+</body>
+</html>

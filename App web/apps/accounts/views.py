@@ -109,7 +109,40 @@ from .decorators import require_rol
 
 @require_rol('admin')
 def ver_usuarios(request):
-    return render(request, 'accounts/admin/ver_usuarios.html')
+    filtro = request.GET.get('filtro', 'todo')
+    usuarios = []
+
+    if filtro in ['todo', 'clientes']:
+        clientes = Cliente.objects.select_related('usuario').all()
+        for c in clientes:
+            usuarios.append({
+                'tipo': 'Cliente',
+                'id': c.usuario.id,
+                'nombre': c.usuario.nombre,
+                'correo': c.usuario.correo,
+                'direccion': c.direccion,
+                'telefono': c.usuario.telefono,
+                'licencia': '',
+            })
+    if filtro in ['todo', 'conductores']:
+        conductores = Conductor.objects.select_related('usuario').all()
+        for c in conductores:
+            usuarios.append({
+                'tipo': 'Conductor',
+                'id': c.usuario.id,
+                'nombre': c.usuario.nombre,
+                'correo': c.usuario.correo,
+                'direccion': '',
+                'telefono': c.usuario.telefono,
+                'licencia': c.tipo_licencia,
+            })
+
+    # Ordenar por tipo y nombre
+    usuarios = sorted(usuarios, key=lambda x: (x['tipo'], x['nombre']))
+    return render(request, 'accounts/admin/ver_usuarios.html', {
+        'usuarios': usuarios,
+        'filtro': filtro,
+    })
 
 @require_rol('admin')
 def admin_ver_paquetes(request):
@@ -123,7 +156,21 @@ def admin_ver_paquetes(request):
 
 @require_rol('admin')
 def ver_historial_envios(request):
-    return render(request, 'accounts/admin/ver_historial_envios.html')
+    filtro = request.GET.get('filtro', 'todo')
+    if filtro == 'entregados':
+        paquetes = Paquete.objects.filter(estado_entrega__nombre_estado="Entregado").select_related(
+            'remitente__usuario', 'estado_entrega')
+    elif filtro == 'fallidos':
+        paquetes = Paquete.objects.filter(estado_entrega__nombre_estado="Fallido").select_related('remitente__usuario',
+                                                                                                  'estado_entrega')
+    else:
+        paquetes = Paquete.objects.filter(estado_entrega__nombre_estado__in=["Entregado", "Fallido"]).select_related(
+            'remitente__usuario', 'estado_entrega')
+
+    return render(request, 'accounts/admin/ver_historial_envios.html', {
+        'paquetes': paquetes,
+        'filtro': filtro,
+    })
 
 @require_rol('admin')
 def registrar_socio(request):
